@@ -3,7 +3,7 @@ const BoxesProblem = require('./problem.js')
 const fs = require('fs');
 const path = require('path');
 
-const nivelActual = 'nivel2.txt'
+const nivelActual = 'nivel4.txt'
 const nivel = fs.readFileSync(path.join(__dirname, '../niveles/'+nivelActual), 'utf-8')
 const lineas = nivel.replace(/\r/g, '').split('\n');
 //elimina los saltos de linea indeseados despues de la ultima linea que contenga la posicion de una caja
@@ -13,15 +13,20 @@ while (lineas[ultimaLineaConContenido].trim() === '') {
 }
 lineas.splice(ultimaLineaConContenido + 1);
 
+let numeroDeFilasMatriz = lineas.length -1;
+while(lineas[numeroDeFilasMatriz].includes(',')){
+  numeroDeFilasMatriz--;
+}
+
 const matriz = [];
-for (let i = 0; i < 6; i++) {
+for (let i = 0; i <= numeroDeFilasMatriz; i++) {
   matriz[i] = lineas[i].split('');
 }
 
-const agentPosition = lineas[6].split(',').map(Number);
+const agentPosition = lineas[numeroDeFilasMatriz+1].split(',').map(Number);
 
 const boxesPosition = [];
-for (let i = 7; i < lineas.length; i++) {
+for (let i = numeroDeFilasMatriz+2; i < lineas.length; i++) {
   boxesPosition.push(lineas[i].split(',').map(Number));
 }
 
@@ -30,7 +35,6 @@ const estado = {
   agentPosition: agentPosition,
   boxesPosition: boxesPosition
 };
-
 const agent = new BoxAgent(agentPosition);
 const problem = new BoxesProblem(matriz, boxesPosition, agent);
 
