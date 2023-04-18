@@ -1,13 +1,11 @@
 class BoxesProblem{
-    constructor(world, boxesPosition, agent, statesHistory = null, actions = null){
+    constructor(world, boxesPosition, agent, statesHistory = null, actions = [], costs = 0){
         this.world = world;
         this.boxesPosition = boxesPosition;
         this.agent = agent;
-        if (actions === null) {
-          this.actions = [];
-      } else {
-          this.actions = actions;
-      }  
+        this.actions = actions;
+        this.costs = costs;
+      
         if (statesHistory === null) {
           this.statesHistory = {[this.obtainHashKey({agentPosition: agent.getPosition(), boxesPosition})]: null};
       } else {
@@ -34,6 +32,10 @@ class BoxesProblem{
       return this.actions;
     }
 
+    getCosts(){
+      return this.costs;
+    }
+  
     makePerceptions() {
         const [agenty, agentx] = this.agent.getPosition();
       
@@ -163,6 +165,11 @@ class BoxesProblem{
      this.agent.updatePosition(newAgentPosition);
      this.boxesPosition = boxesPosition;
      this.statesHistory[this.obtainHashKey({agentPosition: newAgentPosition, boxesPosition})] = null;
+      if(action.includes('ANDMOVEBOX')){
+        this.costs += 2;
+      }else{
+        this.costs++;
+      }
       //formatting action for achieve the requeries project output     
      this.actions.push(action[0]);
 

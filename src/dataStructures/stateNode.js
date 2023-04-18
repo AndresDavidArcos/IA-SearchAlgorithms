@@ -1,5 +1,5 @@
 const BoxAgent = require('../agent.js');
-const BoxesProblem = require('../problem.js')
+const BoxesProblem = require('../problem.js');
 const cloneDeep = require('lodash/cloneDeep');
 
 class StateNode{
@@ -13,6 +13,10 @@ class StateNode{
     getAgent(){
         return this.agent
     }
+
+   getCosts(){
+        return this.problem.getCosts();
+   }
 
     debugNode(){
         return {
@@ -39,10 +43,11 @@ class StateNode{
             const boxesPosition = this.problem.getBoxesPosition();
             const agentPosition = this.agent.getPosition();
             const actions = this.problem.getActions();
+            const costs = this.problem.getCosts();
 
                const childStates = agentActions.map(action => {
                 let newAgent = new BoxAgent(cloneDeep(agentPosition));
-                let newProblem = new BoxesProblem(cloneDeep(world), cloneDeep(boxesPosition), newAgent, statesHistory, cloneDeep(actions)); 
+                let newProblem = new BoxesProblem(world, cloneDeep(boxesPosition), newAgent, statesHistory, cloneDeep(actions), costs); 
                 newProblem.updateState(action)
                return new StateNode(newAgent, newProblem);
             });

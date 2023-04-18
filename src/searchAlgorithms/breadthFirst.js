@@ -1,7 +1,7 @@
 const Queue = require('../dataStructures/queue.js')
 const readline = require('readline');
 
-class BreadthFirsth{
+class BreadthFirst{
     constructor(rootNode){
         this.queue = new Queue();
         this.queue.enqueue(rootNode);
@@ -76,4 +76,4 @@ class BreadthFirsth{
 
 }
 
-module.exports = BreadthFirsth;
+module.exports = BreadthFirst;
