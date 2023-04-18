@@ -14,7 +14,7 @@ class CostsArray {
   findMinCostNode() {
     let minIndex = 0;
     for (let i = 1; i < this.arr.length; i++) {
-      if (this.arr[i] < this.arr[minIndex]) {
+      if (this.arr[i].getCosts() < this.arr[minIndex].getCosts()) {
         minIndex = i;
       }
     }
