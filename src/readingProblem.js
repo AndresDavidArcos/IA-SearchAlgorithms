@@ -6,7 +6,7 @@ const path = require('path');
 const nivelActual = 'nivel4.txt'
 const nivel = fs.readFileSync(path.join(__dirname, '../niveles/'+nivelActual), 'utf-8')
 const lineas = nivel.replace(/\r/g, '').split('\n');
-//elimina los saltos de linea indeseados despues de la ultima linea que contenga la posicion de una caja
+
 let ultimaLineaConContenido = lineas.length - 1;
 while (lineas[ultimaLineaConContenido].trim() === '') {
   ultimaLineaConContenido--;
