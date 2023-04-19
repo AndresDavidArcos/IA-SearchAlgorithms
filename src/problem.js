@@ -165,11 +165,11 @@ class BoxesProblem{
      this.agent.updatePosition(newAgentPosition);
      this.boxesPosition = boxesPosition;
      this.statesHistory[this.obtainHashKey({agentPosition: newAgentPosition, boxesPosition})] = null;
-      if(action.includes('ANDMOVEBOX')){
-        this.costs += 2;
-      }else{
-        this.costs++;
-      }
+     if(action[action.length] === 'X'){
+      this.costs++;
+    }else{
+      this.costs += 2;
+    }
       //formatting action for achieve the requeries project output     
      this.actions.push(action[0]);
 
