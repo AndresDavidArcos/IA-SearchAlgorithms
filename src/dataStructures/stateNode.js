@@ -3,10 +3,15 @@ const BoxesProblem = require('../problem.js');
 const cloneDeep = require('lodash/cloneDeep');
 
 class StateNode{
-    constructor(agent, problem){
+    constructor(agent, problem, depth = 0){
         this.agent = agent;
         this.problem = problem;
+        this.depth = depth;
     }
+    getDepth(){
+        return this.depth;
+    }
+
     getProblem(){
         return this.problem
     }
@@ -17,6 +22,10 @@ class StateNode{
    getCosts(){
         return this.problem.getCosts();
    }
+
+   addDepth(){
+    this.depth++;
+    }
 
     debugNode(){
         return {

@@ -6,7 +6,7 @@ class DeepFirst{
         this.stack.push(rootNode);
     }
 
-    searchGoalState() {
+    searchGoalState(maxDepth = 64) {
         let goalState = false;
         let failState = false;
         let response = ["Error: el agente no ha podido encontrar el estado meta"]
@@ -19,8 +19,10 @@ class DeepFirst{
             if (extractedNodeChilds === true) {
               response = extractedNode.getProblem().getActions();
               goalState = true;
-            } else {
+            } else if(extractedNode.getDepth() < maxDepth){
+
               extractedNodeChilds.forEach(child => {
+                child.addDepth();
                 this.stack.push(child);
               });
             }
