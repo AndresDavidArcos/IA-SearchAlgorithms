@@ -1,6 +1,6 @@
 ### Solución de problemas del juego SOKOBAN
-Antes de empezar a usar el repositorio, se debe hacer un npm install.\n 
-Para ejecutar el archivo *solvingProblem.js* se hace con node solvingProblem.js dentro del direcotrio src.\n
+Antes de empezar a usar el repositorio, se debe hacer un npm install.<br>
+Para ejecutar el archivo *solvingProblem.js* se hace con node solvingProblem.js dentro del direcotrio src.<br>
 Para obtener las soluciones a los problemas del juego SOKOBAN, se debe usar el archivo 
 *solvingProblem.js*. Este archivo tiene dos funciones:
 
