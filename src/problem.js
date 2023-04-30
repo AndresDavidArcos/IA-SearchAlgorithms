@@ -1,4 +1,13 @@
 class BoxesProblem{
+      /**
+     * Constructor de la clase BoxesProblem
+     * @param {Array2d} world - Una matriz que representa el mundo en el que se desarrolla el problema.
+     * @param {Array} boxesPosition - Un arreglo que contiene las coordenadas de las cajas en el mundo.
+     * @param {Object} agent - Un objeto que representa el agente del problema.
+     * @param {Object} statesHistory - Un objeto que representa el historial de estados del problema.
+     * @param {Array} actions - Un arreglo que contiene las acciones del agente.
+     * @param {number} costs - Un número que representa el costo total del problema.
+     */
     constructor(world, boxesPosition, agent, statesHistory = null, actions = [], costs = 0){
         this.world = world;
         this.boxesPosition = boxesPosition;
@@ -35,7 +44,12 @@ class BoxesProblem{
     getCosts(){
       return this.costs;
     }
-  
+      /**
+     * Genera las percepciones del agente en el estado actual del problema.
+     * Solo tendra en cuenta la posicion justo arriba, abajo, izquierda o derecha del agente.
+     * Devolvera B si al lado hay una caja que puede mover, W si hay un muro o 0 si hay un espacio vacio.
+     * @returns {Array} - Un arreglo que contiene las percepciones del agente.
+     */
     makePerceptions() {
         const [agenty, agentx] = this.agent.getPosition();
       
@@ -99,17 +113,31 @@ class BoxesProblem{
           
 
     }
-
-    searchBox(y, x) {   
-        return this.boxesPosition.some(posArr => posArr[0] === y && posArr[1] === x);
-      }
-
+      /**
+      Busca una caja en la posición dada por las coordenadas (y, x) y devuelve true si la encuentra y false si no la encuentra.
+      @param {number} y - La posición vertical de la caja.
+      @param {number} x - La posición horizontal de la caja.
+      @returns {boolean} - Devuelve true si encuentra una caja en la posición dada, de lo contrario false.
+      */
+      searchBox(y, x) {   
+          return this.boxesPosition.some(posArr => posArr[0] === y && posArr[1] === x);
+        }
+      /**
+      Obtiene una clave única en forma de cadena de caracteres que representa el estado actual del problema, dadas las posiciones del agente y de las cajas.
+      @param {Object} state - Un objeto que contiene la posición actual del agente y de las cajas.
+      @returns {string} - La clave única que representa el estado actual del problema.
+      */
       obtainHashKey(state){
         const {agentPosition, boxesPosition} = state; 
         const key = `${agentPosition.join(',')}-${boxesPosition.map(box => box.join(',')).join('-')}`
         return key;
     }
-
+    /**
+    Calcula el nuevo estado del problema después de que el agente realice una acción. Devuelve un objeto que contiene las nuevas posiciones del agente y de las cajas.
+    @param {Object} agentPosition - Un objeto que contiene la posición actual del agente.
+    @param {string} action - Una cadena que representa la acción que el agente realiza.
+    @returns {Object} - Un objeto que contiene las nuevas posiciones del agente y de las cajas.
+    */
     howIsStateAfterAgentAction(agentPosition, action){
         const [agentY, agentX] = agentPosition;
         let newAgentPosition = [agentY, agentX];
@@ -155,11 +183,22 @@ class BoxesProblem{
         
         return {newAgentPosition, boxesPosition};
     }
-
+    /**
+    * Comprueba si el estado dado ya ha sucedido en la historia de los estados del problema. 
+    * Devuelve true si el estado ha sucedido antes y false si es un nuevo estado.
+    @param {string} state - La clave única que representa el estado actual del problema.
+    @returns {boolean} - Devuelve true si el estado ya ha sucedido antes, de lo contrario false.
+    */
     stateHappened(state){
        return (this.statesHistory[this.obtainHashKey(state)] === null)
     }
 
+    /**
+    * Actualiza el estado del problema después de que el agente realice una acción. 
+    * Actualiza la posición del agente y de las cajas, 
+    * y agrega el nuevo estado a la historia de los estados.
+    @param {string} action - Una cadena que representa la acción que el agente realiza.
+    */
     updateState(action){
      const {newAgentPosition, boxesPosition} = this.howIsStateAfterAgentAction(this.agent.getPosition(), action);
      this.agent.updatePosition(newAgentPosition);
@@ -174,7 +213,11 @@ class BoxesProblem{
      this.actions.push(action[0]);
 
     }
-
+    /**
+    * Crea un arreglo con las coordenadas de todas las metas (las posiciones de las cajas objetivo)
+    * en el problema.
+    @returns {Array} - Un arreglo que contiene las coordenadas de todas las metas en el problema.
+    */
     createGoalsCoordinates(){
       let goalsCoordinates = []
       for(let i = 0; i < this.world.length; i++){
@@ -186,7 +229,10 @@ class BoxesProblem{
        }
       this.goalsCoordinates = goalsCoordinates;
       }
-      
+      /**
+      * Comprueba si todas las cajas están en una posición meta.
+      @returns {boolean} - Devuelve true si todas las cajas están en una posición meta, de lo contrario false.
+      */
       isGoal(){
         const goalsHash = {};
         for (let i = 0; i < this.goalsCoordinates.length; i++) {

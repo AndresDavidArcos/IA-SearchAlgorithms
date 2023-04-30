@@ -3,6 +3,10 @@
  * If the object is found the agen take it.
  */
 class BoxAgent{
+    /**
+    * Constructor de la clase. Crea una instancia del agente con la posición inicial especificada.
+    * @param {Array} initialPosition - Coordenadas iniciales del agente en el formato [y, x].
+    */
     constructor(initialPosition) {
         this.currentPosition= initialPosition;
         //LEFT, UP, RIGHT, DOWN, CELL
@@ -40,7 +44,10 @@ class BoxAgent{
     receive(inputs) {
         this.perception = inputs;
     }
-
+    /**
+     * Devuelve las acciones a realizar por el agente, dadas sus percepciones actuales.
+     * @returns {Array} - Arreglo con las acciones posibles del agente, en el formato [accion1, accion2, ...].
+     */
     send() {
         const [LEFT, UP, RIGTH, DOWN] = this.perception;
         const movementKey = this.perception.map(val => val === 'B' ? '0' : val)

@@ -3,43 +3,59 @@ const BoxesProblem = require('./problem.js')
 const fs = require('fs');
 const path = require('path');
 
-const nivelActual = 'nivel4.txt'
-const nivel = fs.readFileSync(path.join(__dirname, '../niveles/'+nivelActual), 'utf-8')
-const lineas = nivel.replace(/\r/g, '').split('\n');
+   function loadLevel(levelName, absoluteRoute=undefined) {
+    let level;
+    if(!absoluteRoute){
+     level = fs.readFileSync(path.join(__dirname, `../niveles/${levelName}`), 'utf-8');
+    }else{
+      const level = fs.readFileSync(absoluteRoute+levelName, 'utf-8');
+    }
+    const lines = level.replace(/\r/g, '').split('\n');
 
-let ultimaLineaConContenido = lineas.length - 1;
-while (lineas[ultimaLineaConContenido].trim() === '') {
-  ultimaLineaConContenido--;
-}
-lineas.splice(ultimaLineaConContenido + 1);
+    let lastLineWithContent = lines.length - 1;
+    while (lines[lastLineWithContent].trim() === '') {
+      lastLineWithContent--;
+    }
+    lines.splice(lastLineWithContent + 1);
 
-let numeroDeFilasMatriz = lineas.length -1;
-while(lineas[numeroDeFilasMatriz].includes(',')){
-  numeroDeFilasMatriz--;
-}
+    let numberOfRowsInMatrix = lastLineWithContent - 1;
+    while(lines[numberOfRowsInMatrix].includes(',')){
+      numberOfRowsInMatrix--;
+    }
 
-const matriz = [];
-for (let i = 0; i <= numeroDeFilasMatriz; i++) {
-  matriz[i] = lineas[i].split('');
-}
+    const matrix = [];
+    for (let i = 0; i <= numberOfRowsInMatrix; i++) {
+      matrix[i] = lines[i].split('');
+    }
 
-const agentPosition = lineas[numeroDeFilasMatriz+1].split(',').map(Number);
+    const agentPosition = lines[numberOfRowsInMatrix + 1].split(',').map(Number);
 
-const boxesPosition = [];
-for (let i = numeroDeFilasMatriz+2; i < lineas.length; i++) {
-  boxesPosition.push(lineas[i].split(',').map(Number));
-}
+    const boxesPosition = [];
+    for (let i = numberOfRowsInMatrix + 2; i < lines.length; i++) {
+      boxesPosition.push(lines[i].split(',').map(Number));
+    }
 
-const estado = {
-  matriz: matriz,
-  agentPosition: agentPosition,
-  boxesPosition: boxesPosition
-};
-const agent = new BoxAgent(agentPosition);
-const problem = new BoxesProblem(matriz, boxesPosition, agent);
+    const agent = new BoxAgent(agentPosition);
+    const problem = new BoxesProblem(matrix, boxesPosition, agent);
 
-module.exports = {agent, problem};
+    return { agent, problem };
+  }
 
+  function loadLevelsFromFolder(absoluteRoute = undefined) {
+    const levels = [];
+    let files;
+    if(!absoluteRoute){
+       files = fs.readdirSync(path.join(__dirname, `../niveles/`), 'utf-8');
+    }else{
+      files = fs.readdirSync(absoluteRoute, 'utf-8');
+    }
+  
+    for (const file of files) {
+      const { agent, problem } = loadLevel(file, absoluteRoute);
+      levels.push({ agent, problem });
+    }
 
+    return levels;
+  }
 
-
+module.exports = {loadLevel, loadLevelsFromFolder};
